@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Col, Row, Form, Container, Table, Alert } from 'react-bootstrap';
-import { FaListAlt, FaSave } from 'react-icons/fa';
+import { FaListAlt, FaSave, FaSearch } from 'react-icons/fa';
 import { format } from 'date-fns';
 import TramitarServicoService from '../../services/TramitarServicoService';
 import RealizarAgServService from '../../services/RealizarAgServService';
 import SecretariaService from '../../services/SecretariaService';
 import CaixaSelecaoTramitar from '../../Componentes/CaixaSelecaoTramitar';
 
+// Instâncias dos serviços
 const tramitarServicoService = new TramitarServicoService();
 const realizarAgServService = new RealizarAgServService();
 const secretariaService = new SecretariaService();
@@ -20,65 +21,93 @@ function TramitarServicosAgendados() {
   const [listaSecretarias, setListaSecretarias] = useState([]);
   const [sucessoMensagem, setSucessoMensagem] = useState('');
   const [erro, setErro] = useState('');
+  const [termoPesquisa, setTermoPesquisa] = useState('');
+  const [tramitacoesFiltradas, setTramitacoesFiltradas] = useState([]);
 
-  // Carregar agendamentos do backend
+  // Função para limpar mensagens após um tempo
+  const limparMensagens = () => {
+    setTimeout(() => {
+      setSucessoMensagem('');
+      setErro('');
+    }, 5000);
+  };
+
+  useEffect(() => {
+    if (!termoPesquisa) {
+      setTramitacoesFiltradas(listaTramitacoes);
+      return;
+    }
+
+    const termoLowerCase = termoPesquisa.toLowerCase();
+    const resultadosFiltrados = listaTramitacoes.filter(tramitacao =>
+      tramitacao.nomeSolicitante?.toLowerCase().includes(termoLowerCase) ||
+      tramitacao.cpfSolicitante?.toLowerCase().includes(termoLowerCase) ||
+      tramitacao.msg_motivo?.toLowerCase().includes(termoLowerCase) ||
+      tramitacao.tipo_servico?.toLowerCase().includes(termoLowerCase) ||
+      tramitacao.nome_secretaria?.toLowerCase().includes(termoLowerCase)
+    );
+
+    setTramitacoesFiltradas(resultadosFiltrados);
+  }, [termoPesquisa, listaTramitacoes]);
+
   const carregarAgendamentos = async () => {
     try {
       const dados = await realizarAgServService.obterTodos();
       setListaAgendamentos(dados);
-    } catch (error) {
+    } catch {
       setErro('Erro ao carregar agendamentos.');
+      limparMensagens();
     }
   };
 
-  // Carregar secretarias do backend
   const carregarSecretarias = async () => {
     try {
       const dados = await secretariaService.obterTodos();
       setListaSecretarias(dados);
-    } catch (error) {
+    } catch {
       setErro('Erro ao carregar secretarias.');
+      limparMensagens();
     }
   };
 
-  // Função para salvar tramitação
   const handleSalvarTramitacao = async () => {
     if (!idAgendamento || !idSecretaria || !msgMotivo) {
       setErro('Por favor, preencha todos os campos.');
+      limparMensagens();
       return;
     }
     try {
       await tramitarServicoService.adicionar({
         id_servico: idAgendamento,
         id_secretaria: idSecretaria,
-        msg_motivo: msgMotivo
+        msg_motivo: msgMotivo,
       });
       setSucessoMensagem('Tramitação salva com sucesso!');
       limparCampos();
       carregarTramitacoes();
-    } catch (error) {
+      limparMensagens();
+    } catch {
       setErro('Erro ao salvar tramitação.');
+      limparMensagens();
     }
   };
 
-  // Carregar tramitações do backend
   const carregarTramitacoes = async () => {
     try {
       const dados = await tramitarServicoService.obterTodos();
       setListaTramitacoes(dados);
-    } catch (error) {
+    } catch {
       setErro('Erro ao carregar tramitações.');
+      limparMensagens();
     }
   };
 
-  // Limpar campos do formulário
   const limparCampos = () => {
     setIdAgendamento('');
     setIdSecretaria('');
     setMsgMotivo('');
   };
 
-  // Carregar dados iniciais ao montar o componente
   useEffect(() => {
     carregarAgendamentos();
     carregarSecretarias();
@@ -121,7 +150,7 @@ function TramitarServicosAgendados() {
                       enderecoFonteDados="http://localhost:3001/secretaria"
                       campoChave="id"
                       campoExibicao="nome_secretaria"
-                      funcaoSelecao={(id) => setIdSecretaria(id)}
+                      funcaoSelecao={setIdSecretaria}
                     />
                   </Form.Group>
                 </Col>
@@ -153,16 +182,35 @@ function TramitarServicosAgendados() {
                 </Col>
               </Row>
 
-              {sucessoMensagem && <Alert variant="success" className="mt-3">{sucessoMensagem}</Alert>}
-              {erro && <Alert variant="danger" className="mt-3">{erro}</Alert>}
+              {sucessoMensagem && (
+                <Alert variant="success" className="mt-3">
+                  {sucessoMensagem}
+                </Alert>
+              )}
+              {erro && (
+                <Alert variant="danger" className="mt-3">
+                  {erro}
+                </Alert>
+              )}
             </Form>
           </Card.Body>
         </Card>
 
         <Card className="mt-4">
-          <Card.Header as="h5">Tramitações Realizadas</Card.Header>
+          <Card.Header as="h5" className="d-flex justify-content-between align-items-center">
+            <span>Tramitações Realizadas</span>
+            <div className="d-flex align-items-center" style={{ width: '300px' }}>
+              <FaSearch className="text-secondary me-2" />
+              <Form.Control
+                type="text"
+                placeholder="Pesquisar tramitações..."
+                value={termoPesquisa}
+                onChange={(e) => setTermoPesquisa(e.target.value)}
+              />
+            </div>
+          </Card.Header>
           <Card.Body>
-            {listaTramitacoes && listaTramitacoes.length > 0 ? (
+            {tramitacoesFiltradas.length > 0 ? (
               <Table striped bordered hover>
                 <thead>
                   <tr>
@@ -176,27 +224,15 @@ function TramitarServicosAgendados() {
                   </tr>
                 </thead>
                 <tbody>
-            {listaTramitacoes.map((tramitacao) => (
-          <tr key={tramitacao.id}>
-            <td>{tramitacao.id}</td>
-            <td>{tramitacao.nomeSolicitante}</td>
-            <td>{tramitacao.cpfSolicitante}</td>
-            <td>{tramitacao.msg_motivo}</td>
-            <td>{tramitacao.tipo_servico}</td>
-            <td>{tramitacao.nome_secretaria}</td>
-            <td>{tramitacao.data_tramitacao ? format(new Date(tramitacao.data_tramitacao), 'HH:mm') : '-'}</td>
-          </tr>
-                  ))}
-                </tbody>
-              </Table>
-            ) : (
-              <div className="text-center">Nenhuma tramitação para listar</div>
-            )}
-          </Card.Body>
-        </Card>
-      </Container>
-    </div>
-  );
-}
+                  {tramitacoesFiltradas.map((tramitacao) => (
+                    <tr key={tramitacao.id}>
+                      <td>{tramitacao.id}</td>
+                      <td>{tramitacao.nomeSolicitante}</td>
+                      <td>{tramitacao.cpfSolicitante}</td>
+                      <td>{tramitacao.msg_motivo}</td>
+                      <td>{tramitacao.tipo_servico}</td>
+                      <td>{tramitacao.nome_secretaria}</td>
+                      <td>
+                        {tramitacao.data_tramitacao ? format(new Date(tramitacao.data_tramitacao), 'HH') : '-'} </td> </tr> ))} </tbody> </Table> ) : ( <div className="text-center"> {termoPesquisa ? 'Nenhuma tramitação encontrada para esta pesquisa' : 'Nenhuma tramitação para listar'} </div> )} </Card.Body> </Card> </Container> </div> ); }
 
 export default TramitarServicosAgendados;
