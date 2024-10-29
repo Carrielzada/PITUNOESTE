@@ -1,5 +1,5 @@
 -- Criação do banco de dados
-CREATE DATABASE IF NOT EXISTS `sistemaecogest` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE IF NOT EXISTS `sistemaecogest`;
 
 USE `sistemaecogest`;
 
@@ -17,7 +17,7 @@ CREATE TABLE `beneficiario` (
   `datanascimento` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela beneficiario
 INSERT INTO `beneficiario` (`id`, `nome`, `cpf`, `contato`, `email`, `endereco`, `bairro`, `numero`, `datanascimento`) VALUES
@@ -32,7 +32,7 @@ CREATE TABLE `cadastrotiposdemaquinario` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela cadastrotiposdemaquinario
 INSERT INTO `cadastrotiposdemaquinario` (`id`, `nome`) VALUES
@@ -41,16 +41,16 @@ INSERT INTO `cadastrotiposdemaquinario` (`id`, `nome`) VALUES
 (3, 'Implementos Agrícolas'),
 (4, 'Equipamentos Pequenos (ferramentas)');
 
--- Tabela cadastrotiposdeservico
-DROP TABLE IF EXISTS `cadastrotiposdeservico`;
-CREATE TABLE `cadastrotiposdeservico` (
+-- Tabela servico
+DROP TABLE IF EXISTS `servico`;
+CREATE TABLE `servico` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
--- Inserção de dados na tabela cadastrotiposdeservico
-INSERT INTO `cadastrotiposdeservico` (`id`, `nome`) VALUES
+-- Inserção de dados na tabela servico
+INSERT INTO `servico` (`id`, `nome`) VALUES
 (1, 'Realizar Poda e Remoção de plantas'),
 (3, 'Liberação de mudas de árvores para beneficiários'),
 (4, 'Medição e análise da qualidade do ar'),
@@ -64,7 +64,7 @@ CREATE TABLE `cadtipoativsust` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela cadtipoativsust
 INSERT INTO `cadtipoativsust` (`id`, `nome`) VALUES
@@ -97,7 +97,7 @@ CREATE TABLE `colaboradores` (
   `email` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `cpf_UNIQUE` (`cpf`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela colaboradores
 INSERT INTO `colaboradores` (`id`, `nome`, `cpf`, `contato`, `endereco`, `bairro`, `numero`, `dataNascimento`, `cargo`, `nivelEscolaridade`, `email`) VALUES
@@ -124,7 +124,7 @@ CREATE TABLE `criarativsust` (
   PRIMARY KEY (`criar_id`),
   KEY `fk_cadtipoativsust_criarativsust` (`id`),
   CONSTRAINT `fk_cadtipoativsust_criarativsust` FOREIGN KEY (`id`) REFERENCES `cadtipoativsust` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela criarativsust
 INSERT INTO `criarativsust` (`criar_id`, `criar_nome`, `criar_cpf`, `criar_contato`, `criar_endereco`, `criar_bairro`, `criar_numero`, `id`, `criar_data`, `criar_horarioInicial`, `criar_horarioFinal`, `criar_descricao`) VALUES
@@ -140,7 +140,7 @@ CREATE TABLE `maquinario` (
   `placa` varchar(9) NOT NULL,
   `ano` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela maquinario
 INSERT INTO `maquinario` (`id`, `modelo`, `placa`, `ano`) VALUES
@@ -153,7 +153,7 @@ DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `id` INT AUTO_INCREMENT PRIMARY KEY,
   `name` VARCHAR(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela roles
 INSERT INTO `roles` (`name`) VALUES
@@ -169,7 +169,7 @@ CREATE TABLE `users` (
   `password` VARCHAR(255) NOT NULL,
   `role_id` INT,
   FOREIGN KEY (`role_id`) REFERENCES `roles`(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela users
 INSERT INTO `users` (`email`, `password`, `role_id`) VALUES
@@ -185,7 +185,7 @@ CREATE TABLE `user` (
   `nome` VARCHAR(35) NOT NULL,
   `senha` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela user (adicional para autenticação)
 INSERT INTO `user` (`email`, `nome`, `senha`) VALUES
@@ -211,7 +211,7 @@ CREATE TABLE `realizaragserv` (
   PRIMARY KEY (`agserv_id`),
   KEY `fk_cadastrotiposdeservico_realizaragserv` (`agserv_tipoServico_id`),
   CONSTRAINT `fk_cadastrotiposdeservico_realizaragserv` FOREIGN KEY (`agserv_tipoServico_id`) REFERENCES `cadastrotiposdeservico` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+);
 
 -- Inserção de dados na tabela realizaragserv
 INSERT INTO `realizaragserv` VALUES 
@@ -219,9 +219,62 @@ INSERT INTO `realizaragserv` VALUES
 (2,'Ana Maria','98765432100','(22) 98765-4321','Av. Brasil, 321','Zona Sul',100,3,'2024-10-21','10:00:00','Liberação de mudas de árvores para comunidade'),
 (3,'Roberto Silva','11122233344','(33) 99999-8888','Rua das Flores, 789','Jardim Primavera',120,4,'2024-10-22','11:30:00','Medição e análise da qualidade do ar em área industrial');
 
--- Tabela servico (para Gerenciar Ciclo de Serviços)
-DROP TABLE IF EXISTS `servico`;
-CREATE TABLE `servico` (
+-- Criar tabela de secretaria
+CREATE TABLE secretaria(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `nome_secretaria` varchar(100) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+-- Inserção de dados na tabela secretaria
+LOCK TABLE `secretaria` WRITE;
+INSERT INTO `secretaria` VALUES 
+(1,'Secretaria de Meio Ambiente'), 
+(2,'Secretaria de Governo'), 
+(3,'Secretaria de Obras'), 
+(4,'Secretaria de Serviços Municipais'),
+(5,'Secretaria de Turismo');
+UNLOCK TABLES;
+
+
+CREATE TABLE tramitarserv (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_servico INT NOT NULL,
+    id_secretaria INT NOT NULL,
+    msg_motivo TEXT NOT NULL,
+    data_tramitacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (id_servico) REFERENCES servico(id),
+    FOREIGN KEY (id_secretaria) REFERENCES secretaria(id)
+);
+
+CREATE TABLE `realizaragserv` (
+  `agserv_id` int(11) NOT NULL AUTO_INCREMENT,
+  `agserv_nomeSolicitante` varchar(100) NOT NULL,
+  `agserv_cpfSolicitante` varchar(14) NOT NULL,
+  `agserv_contatoSolicitante` varchar(20) DEFAULT NULL,
+  `agserv_endereco` varchar(255) DEFAULT NULL,
+  `agserv_bairro` varchar(100) DEFAULT NULL,
+  `agserv_numero` int(5) DEFAULT NULL,
+  `agserv_servico_id` int(11) NOT NULL,
+  `agserv_data` date DEFAULT NULL,
+  `agserv_horario` time NOT NULL,
+  `agserv_descricao` varchar(1000) NOT NULL,
+  PRIMARY KEY (`agserv_id`),
+  KEY `fk_servico_realizaragserv` (`agserv_servico_id`),
+  CONSTRAINT `fk_servico_realizaragserv` FOREIGN KEY (`agserv_servico_id`) REFERENCES `servico` (`id`)
+) ;
+
+LOCK TABLES `realizaragserv` WRITE;
+INSERT INTO `realizaragserv` VALUES (2,'Ana Maria','98765432100','(22) 98765-4321','Av. Brasil, 321','Zona Sul',100,3,'2024-10-21','10:00:00','Liberação de mudas de árvores para comunidade'),(3,'Roberto Silva','11122233344','(33) 99999-8888','Rua das Flores, 789','Jardim Primavera',120,4,'2024-10-22','11:30:00','Medição e análise da qualidade do ar em área industrial');
+UNLOCK TABLES;
+
+
+
+-- NÃO CRIAR AS TABELAS ABAIXO AINDA! É PARA A PRÓXIMA FUNÇÃO FUNDAMENTAL
+-- Tabela Ciclo (para Gerenciar Ciclo de Serviços)
+DROP TABLE IF EXISTS `ciclo`;
+CREATE TABLE `ciclo` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `status` VARCHAR(50) NOT NULL,
   `data_inicio` DATE NOT NULL,
@@ -233,11 +286,11 @@ CREATE TABLE `servico` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`beneficiario_id`) REFERENCES `beneficiario`(`id`),
   FOREIGN KEY (`colaborador_id`) REFERENCES `colaboradores`(`id`),
-  FOREIGN KEY (`tipo_servico_id`) REFERENCES `cadastrotiposdeservico`(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  FOREIGN KEY (`tipo_servico_id`) REFERENCES `servico`(`id`)
+);
 
--- Inserção de dados na tabela servico
-INSERT INTO `servico` (`status`, `data_inicio`, `data_fim`, `descricao`, `beneficiario_id`, `colaborador_id`, `tipo_servico_id`) VALUES
+-- Inserção de dados na tabela ciclo
+INSERT INTO `ciclo` (`status`, `data_inicio`, `data_fim`, `descricao`, `beneficiario_id`, `colaborador_id`, `tipo_servico_id`) VALUES
 ('Pendente', '2024-10-20', NULL, 'Descrição do serviço pendente', 1, 2, 1),
 ('Em Andamento', '2024-10-21', NULL, 'Serviço de poda em andamento', 2, 3, 4),
 ('Concluído', '2024-10-15', '2024-10-18', 'Serviço de coleta de lixo finalizado', 3, 1, 3);
@@ -246,13 +299,13 @@ INSERT INTO `servico` (`status`, `data_inicio`, `data_fim`, `descricao`, `benefi
 DROP TABLE IF EXISTS `historico_servico`;
 CREATE TABLE `historico_servico` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `servico_id` INT NOT NULL,
+  `ciclo_id` INT NOT NULL,
   `status` VARCHAR(50) NOT NULL,
   `alterado_por` VARCHAR(100),
   `data_alteracao` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`servico_id`) REFERENCES `servico`(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  FOREIGN KEY (`ciclo_id`) REFERENCES `ciclo`(`id`)
+);
 
 -- Inserção de dados na tabela historico_servico
 INSERT INTO `historico_servico` (`servico_id`, `status`, `alterado_por`) VALUES
