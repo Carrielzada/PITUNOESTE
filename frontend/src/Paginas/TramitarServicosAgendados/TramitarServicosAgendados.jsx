@@ -7,7 +7,6 @@ import RealizarAgServService from '../../services/RealizarAgServService';
 import SecretariaService from '../../services/SecretariaService';
 import CaixaSelecaoTramitar from '../../Componentes/CaixaSelecaoTramitar';
 
-// Instâncias dos serviços
 const tramitarServicoService = new TramitarServicoService();
 const realizarAgServService = new RealizarAgServService();
 const secretariaService = new SecretariaService();
@@ -24,7 +23,6 @@ function TramitarServicosAgendados() {
   const [termoPesquisa, setTermoPesquisa] = useState('');
   const [tramitacoesFiltradas, setTramitacoesFiltradas] = useState([]);
 
-  // Função para limpar mensagens após um tempo
   const limparMensagens = () => {
     setTimeout(() => {
       setSucessoMensagem('');

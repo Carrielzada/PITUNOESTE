@@ -67,6 +67,15 @@ function NavBar() {
                             </Link>
                         </li>
                     )}
+
+                    {(isAdmin() || isDirector() || isColab()) && (
+                        <li className="nav-link px-2 py-3">
+                            <Link to="/secretaria">
+                                <FaRegClone />
+                                <span className="mx-2">Cadastro de Secretaria</span>
+                            </Link>
+                        </li>
+                    )}
                     {(isAdmin() || isDirector() || isColab()) && (
                         <li className="nav-link px-2 py-3">
                             <Link to="/RealizarAgServ">

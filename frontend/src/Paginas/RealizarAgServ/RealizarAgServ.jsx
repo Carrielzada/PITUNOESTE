@@ -341,7 +341,7 @@ function RealizarAgServ() {
                         <CaixaSelecao
                           enderecoFonteDados="http://localhost:3001/servico"
                           campoChave="id"
-                          campoExibicao="nome"
+                          campoExibicao="nome_servico"
                           funcaoSelecao={handleSelecaoServico}
                           localLista={tiposServicos}
                           valorSelecionado={agendamento.tipoServico.id}

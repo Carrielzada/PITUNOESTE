@@ -1,5 +1,5 @@
 const API_BASE_URL = 'http://localhost:3001'
-class MaquinarioService {
+class SecretariaService {
 
     async obterTodos() {
         const response = await fetch(`${API_BASE_URL}/secretaria`, {
@@ -103,4 +103,4 @@ class MaquinarioService {
 
 }
 
-export default MaquinarioService
+export default SecretariaService;

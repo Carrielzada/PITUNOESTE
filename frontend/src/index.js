@@ -18,7 +18,8 @@ import Register from './Componentes/Register';
 import ProtectedRoute from './Componentes/ProtectedRoute';
 import UpdateUserRole from './Componentes/atualizarrole';
 import GerenciarCicloServicos from './Paginas/GerenciarCicloServ/GerenciarCicloServicos';
-import TramitarServicosAgendados from './Paginas/TramitarServicosAgendados/TramitarServicosAgendados'; // Importação do novo componente
+import TramitarServicosAgendados from './Paginas/TramitarServicosAgendados/TramitarServicosAgendados';
+import Secretaria from './Paginas/Secretaria/Secretaria';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: '/tramitar',
         element: <ProtectedRoute> <TramitarServicosAgendados /> </ProtectedRoute>, // Rota protegida para Tramitar Serviços Agendados
+      },
+      {
+        path: '/secretaria',
+        element: <ProtectedRoute> <Secretaria /> </ProtectedRoute>, // Rota protegida para Secretaria
       },
     ],
   },

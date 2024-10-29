@@ -67,7 +67,7 @@ async adicionar() {
             agserv_endereco, 
             agserv_bairro, 
             agserv_numero, 
-            agserv_tipoServico_id, 
+            agserv_servico_id,  
             agserv_data, 
             agserv_horario, 
             agserv_descricao
@@ -103,7 +103,7 @@ async adicionar() {
                 agserv_data = ?, 
                 agserv_horario = ?, 
                 agserv_descricao = ?, 
-                agserv_servico_id = ?  -- Atualizando o tipo de serviço
+                agserv_servico_id = ?
             WHERE agserv_id = ?
         `;
 
