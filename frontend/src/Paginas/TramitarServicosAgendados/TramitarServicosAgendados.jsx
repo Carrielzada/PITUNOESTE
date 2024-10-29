@@ -170,7 +170,7 @@ function TramitarServicosAgendados() {
                     <th>Nome do Solicitante</th>
                     <th>CPF Solicitante</th>
                     <th>Mensagem</th>
-                    <th>ID Agendamento</th>
+                    <th>Serviço Agendado</th>
                     <th>Secretaria</th>
                     <th>Horário</th>
                   </tr>
@@ -179,10 +179,10 @@ function TramitarServicosAgendados() {
             {listaTramitacoes.map((tramitacao) => (
           <tr key={tramitacao.id}>
             <td>{tramitacao.id}</td>
-            <td>{tramitacao.agserv_nomeSolicitante}</td>
-            <td>{tramitacao.agserv_cpfSolicitante}</td>
+            <td>{tramitacao.nomeSolicitante}</td>
+            <td>{tramitacao.cpfSolicitante}</td>
             <td>{tramitacao.msg_motivo}</td>
-            <td>{tramitacao.id_servico}</td>
+            <td>{tramitacao.tipo_servico}</td>
             <td>{tramitacao.nome_secretaria}</td>
             <td>{tramitacao.data_tramitacao ? format(new Date(tramitacao.data_tramitacao), 'HH:mm') : '-'}</td>
           </tr>

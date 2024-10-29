@@ -46,7 +46,7 @@ export default function CaixaSelecaoTramitar({ enderecoFonteDados, campoChave, c
 
                             if (selecionado) {
                                 setValorSelecionado(itemSelecionado);
-                                funcaoSelecao(selecionado);
+                                funcaoSelecao(itemSelecionado);
                             }
                         }}
                     >

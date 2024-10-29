@@ -14,24 +14,26 @@ class TramitarServModel {
     // agora estão sendo puxados de agserv_servico_id
     async obterTodos() {
         const listaTramitacoes = await database.ExecutaComando(`
-            SELECT 
-                t.id, 
-                t.id_servico, 
-                t.id_secretaria, 
-                t.msg_motivo, 
-                t.data_tramitacao,
-                s.nome_servico AS tipo_servico, 
-                sec.nome_secretaria
-            FROM 
-                tramitarserv t
-            JOIN 
-                realizaragserv r ON t.id_servico = r.agserv_id
-            JOIN 
-                servico s ON r.agserv_servico_id = s.id
-            JOIN 
-                secretaria sec ON t.id_secretaria = sec.id
-            ORDER BY 
-                t.data_tramitacao DESC
+           SELECT 
+    t.id, 
+    t.id_servico, 
+    t.id_secretaria, 
+    t.msg_motivo, 
+    t.data_tramitacao,
+    r.agserv_nomeSolicitante AS nomeSolicitante,
+    r.agserv_cpfSolicitante AS cpfSolicitante,
+    s.nome_servico AS tipo_servico, 
+    sec.nome_secretaria
+FROM 
+    tramitarserv t
+JOIN 
+    realizaragserv r ON t.id_servico = r.agserv_id
+JOIN 
+    servico s ON r.agserv_servico_id = s.id
+JOIN 
+    secretaria sec ON t.id_secretaria = sec.id
+ORDER BY 
+    t.data_tramitacao DESC;
         `);
         return listaTramitacoes;
     }
