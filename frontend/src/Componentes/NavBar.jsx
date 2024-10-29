@@ -106,7 +106,7 @@ function NavBar() {
                             )}
 
                             {(isAdmin() || isDirector() || isColab()) && (
-                                <li className="nav-link px-2 py-3">
+                                <li className="nav-link px-2 py-2">
                                     <Link to="/secretaria">
                                         <FaRegClone />
                                         <span className="mx-2">Cadastro de Secretaria</span>
