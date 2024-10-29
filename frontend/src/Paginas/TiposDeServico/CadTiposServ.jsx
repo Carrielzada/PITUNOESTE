@@ -7,9 +7,6 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import ServicoService from '../../services/ServicoService.js';
 const servicoService = new ServicoService();
 
-
-
-
 function CadTiposServ() {
     const [listaServicos, setListaServicos] = useState(null);
     const [sucessoMensagem, setSucessoMensagem] = useState('');
@@ -17,7 +14,7 @@ function CadTiposServ() {
     const [erro, setErro] = useState('');
     const navigate = useNavigate();
     const [validated, setValidated] = useState(false);
-    const [nome, setNome] = useState('');
+    const [nome_servico, setNomeServico] = useState(''); // Alterado de nome para nome_servico
     const [errors, setErrors] = useState({});
     const [termoBusca, setTermoBusca] = useState('');
     const { idServico } = useParams();
@@ -50,44 +47,44 @@ function CadTiposServ() {
         if (idServico) {
             const obterServico = async () => {
                 const dados = await servicoService.obterPorId(idServico);
-                setNome(dados.nome);
+                setNomeServico(dados.nome_servico); // Alterado de nome para nome_servico
             };
             obterServico();
         }
     }, [idServico]);
 
-    const handleNomeChange = (e) => {
+    const handleNomeServicoChange = (e) => { // Alterado nome da função
         const value = e.target.value;
-        setNome(value);
-        if (errors.nome && value.length >= 20) {
+        setNomeServico(value);
+        if (errors.nome_servico && value.length >= 20) { // Alterado de nome para nome_servico
             setErrors({});
         }
     };
 
-    const validateNome = (value) => {
+    const validateNomeServico = (value) => { // Alterado nome da função
         let error = '';
         if (!value) {
-            error = 'O Nome não pode estar vazio.';
+            error = 'O Nome do Serviço não pode estar vazio.';
         } else if (value.length < 20) {
-            error = 'O Nome deve ter no mínimo 20 caracteres.';
+            error = 'O Nome do Serviço deve ter no mínimo 20 caracteres.';
         } else if (value.length > 100) {
-            error = 'O Nome não pode ter mais de 100 caracteres.';
+            error = 'O Nome do Serviço não pode ter mais de 100 caracteres.';
         }
         return error;
     };
 
     async function handleSalvar(event) {
         event.preventDefault();
-        const nomeError = validateNome(nome);
+        const nomeError = validateNomeServico(nome_servico); // Alterado nome da função e variável
 
         if (nomeError) {
-            setErrors({ nome: nomeError });
+            setErrors({ nome_servico: nomeError }); // Alterado de nome para nome_servico
             return;
         }
 
         const servico = {
             id: idServico || 0,
-            nome: nome,
+            nome_servico: nome_servico, // Alterado de nome para nome_servico
         };
 
         if (!idServico) {
@@ -98,7 +95,7 @@ function CadTiposServ() {
             setSucessoMensagem('Serviço atualizado com sucesso!');
         }
 
-        setNome('');
+        setNomeServico(''); // Alterado de setNome para setNomeServico
         setErrors({});
         navigate('/TiposDeServico'); 
         setEditandoServico(null);
@@ -122,12 +119,12 @@ function CadTiposServ() {
     };
 
     const handleEditar = (servico) => {
-        setNome(servico.nome);
+        setNomeServico(servico.nome_servico); // Alterado de nome para nome_servico
         setEditandoServico(servico);
     };
 
     const handleCancelar = () => {
-        setNome('');
+        setNomeServico(''); // Alterado de setNome para setNomeServico
         setEditandoServico(null);
         setErro('');
         navigate('/TiposDeServico');
@@ -169,18 +166,18 @@ function CadTiposServ() {
                             <Form noValidate validated={validated} onSubmit={handleSalvar}>
                                 <Row className="d-flex align-items-start">
                                     <Col lg={8}>
-                                        <Form.Group controlId="nome">
+                                        <Form.Group controlId="nome_servico">
                                             <Form.Control
                                                 type="text"
-                                                className={`${errors.nome ? 'is-invalid' : 'border-secondary'}`}
+                                                className={`${errors.nome_servico ? 'is-invalid' : 'border-secondary'}`}
                                                 placeholder="Digite um novo serviço..."
                                                 required
-                                                value={nome}
-                                                isInvalid={!!errors.nome}
-                                                onChange={handleNomeChange}
+                                                value={nome_servico}
+                                                isInvalid={!!errors.nome_servico}
+                                                onChange={handleNomeServicoChange}
                                             />
                                             <Form.Control.Feedback type="invalid">
-                                                {errors.nome}
+                                                {errors.nome_servico}
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
@@ -232,12 +229,11 @@ function CadTiposServ() {
                                             listaServicos.map((servico) => (
                                                 <tr key={servico.id}>
                                                     <td>{servico.id}</td>
-                                                    <td colSpan={3}>{servico.nome}</td>
+                                                    <td colSpan={3}>{servico.nome_servico}</td>
                                                     <td colSpan={2} className='text-center'>
                                                         <Link to={`${servico.id}`} className="btn-primary m-1" onClick={() => handleEditar(servico)}>
                                                             <FaEdit />
                                                         </Link>
-                                                        
                                                     </td>
                                                     <td colSpan={2} className='text-center'>
                                                         <Link className="text-danger text" onClick={() => handleExcluir(servico.id)}>
