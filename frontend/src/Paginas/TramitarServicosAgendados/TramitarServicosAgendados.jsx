@@ -230,7 +230,18 @@ function TramitarServicosAgendados() {
                       <td>{tramitacao.msg_motivo}</td>
                       <td>{tramitacao.tipo_servico}</td>
                       <td>{tramitacao.nome_secretaria}</td>
-                      <td>
-                        {tramitacao.data_tramitacao ? format(new Date(tramitacao.data_tramitacao), 'HH') : '-'} </td> </tr> ))} </tbody> </Table> ) : ( <div className="text-center"> {termoPesquisa ? 'Nenhuma tramitação encontrada para esta pesquisa' : 'Nenhuma tramitação para listar'} </div> )} </Card.Body> </Card> </Container> </div> ); }
+                      <td>{tramitacao.data_tramitacao ? format(new Date(tramitacao.data_tramitacao), 'HH') : '-'} 
+                      </td> 
+                    </tr> 
+                    ))} 
+                    </tbody> 
+                    </Table> ) : 
+                    (<div className="text-center"> 
+                    {termoPesquisa ? 'Nenhuma tramitação encontrada para esta pesquisa' : 'Nenhuma tramitação para listar'} 
+                    </div> )} 
+                    </Card.Body> 
+                    </Card> 
+                    </Container> 
+                    </div> ); }
 
 export default TramitarServicosAgendados;
